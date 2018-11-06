@@ -1,3 +1,2 @@
-# jsstudy
-study on javascript
+# Javascript
 记录日常学习小结
