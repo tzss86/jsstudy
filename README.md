@@ -6,3 +6,4 @@
 * [原型（Prototype）与原型链（prototype chain）](./part1/Prototype.md)
 * [关键字this](./part1/This.md)
 * [轮子们（new/call/apply/bind）](./part1/wheels.md)
+* [数组](./part1/Array.md)
