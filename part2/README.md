@@ -55,3 +55,45 @@ light(false,0,0,0);//关闭，剩余参数可以设为0
 ```
 
 <img src="./images/p2_1.png" width="15%" height="auto"/>
+
+#### 3.如何渲染几万条数据不卡住页面？
+看到这个问题的第一反应是：实际的产品设计中应该不会这种需求吧，首先几万条数据应该不是一次性请求回来的，肯定需要分批请求，或根据用户的操作加载更多数据。就算现在有几万条数据需要渲染出来，ios中会复用cell，其实超过一屏幕的cell就不会渲染了。那在网页中，肯定也是分批渲染的。
+
+```html
+<ul id="list"></ul>
+```
+
+```javascript
+const total = 100000;//总数10万条
+const once = 20;//单次插入20条
+const loopCount = total / once; //需要渲染几次
+let countOfRender = 0;
+
+let list = document.querySelector("#list"); 
+
+function addLi() {
+  const fragment = document.createDocumentFragment(); //创建一个文档片段，通过将子元素li插入片段时，不会造成回流
+
+  for (let i = 0; i < once; i++) {
+   const li = document.createElement("li");
+   li.textContent = Math.floor(Math.random() * total);
+   fragment.appendChild(li);
+  }
+
+  list.appendChild(fragment);//将带20条li的片段插入到ul中
+  countOfRender += 1;
+  loop();
+
+}
+ 
+function loop() {
+  if (countOfRender < loopCount) {//只要没达到总共需要渲染的次数，就不断重绘
+    window.requestAnimationFrame(addLi);//刷新屏幕，add函数在下次重新绘制动画时执行。
+  }
+} 
+
+loop();
+```
+
+<img src="./images/p2_2.png" width="45%" height="auto"/>
+
