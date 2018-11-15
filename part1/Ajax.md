@@ -133,3 +133,7 @@ $.ajax({
 
 jQuery会自动使用`<script>`元素并随机生成一个callback名称用于内部接收服务器响应，最后再通过success回调函数把响应数据反馈出来
 
+#### 5.参考规范
+[xhr.spec](https://xhr.spec.whatwg.org/)
+
+[返回顶端](#Ajax)
