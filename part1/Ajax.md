@@ -136,4 +136,4 @@ jQuery会自动使用`<script>`元素并随机生成一个callback名称用于�
 #### 5.参考规范
 [xhr.spec](https://xhr.spec.whatwg.org/)
 
-[返回顶端](#Ajax)
+[返回顶端](#Ajax) [返回目录](../README.md)

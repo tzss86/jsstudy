@@ -132,3 +132,5 @@ const startTicking = () => setInterval(
 startTicking();
 ```
 <img src="./images/p2_4.png" width="20%" height="auto"/>
+
+[返回顶端](#概念)  [返回目录](../README.md)

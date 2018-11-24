@@ -162,4 +162,4 @@ showMessage.mimicBind(obj,"rui")("english");//分2次传入的参数mimic和agr1
 ```
 <img src="./images/p_33.png" width="25%" height="auto"/>
 
-[返回顶端](#轮子们)
+[返回顶端](#轮子们) [返回目录](../README.md)
