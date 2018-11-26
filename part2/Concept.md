@@ -77,7 +77,25 @@ const f1 = (a) => a+1;
 const f2 = (b) => b+1;
 compose(f1,f2)(10);//(10+1)+1 = 12
 ```
-第一个函数的输出是第二个函数的输入，第二个函数的输出是第三个函数的输入.... 并且我们通过传入第一个函数的参数开始在“数据传递管道”中执行。
+第一个函数的输出是第二个函数的输入，第二个函数的输出是第三个函数的输入.... 并且我们通过传入第一个函数的参数开始在“数据传递管道”中执行。估计有人一眼没办法看出compose是怎么来的，我们分解一下步骤：
+```javascript
+const A = (arg) => arg*2;
+const B = (arg) => arg*3;
+B(A(3));//18
+
+const compose2 = (f1,f2) => {//compose2接收2个函数作为参数，并返回一个函数，这个函数就是将arg作为参数传给f1执行，f1(arg)的结果传递给f2执行，返回最后的结果。
+    return function(arg){
+        return f2(f1(arg));
+    }
+}
+compose2(A,B)(3);//18
+//好了，当不止两个函数时，我们利用数组的一个[].reduce()方法来实现累积执行
+const compose = (...fns) =>{
+    return (arg) => {
+        fns.reduce((x,f)=>f(x),arg);
+    }
+}
+```
 
 ##### 1.2 综合应用
 ```javascript
@@ -132,5 +150,6 @@ const startTicking = () => setInterval(
 startTicking();
 ```
 <img src="./images/p2_4.png" width="20%" height="auto"/>
+
 
 [返回顶端](#概念)  [返回目录](../README.md)
