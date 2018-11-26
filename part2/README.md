@@ -97,4 +97,67 @@ loop();
 
 <img src="./images/p2_2.png" width="45%" height="auto"/>
 
+
+#### 4.页面上有一个input，还有一个p标签，改变input后p标签也跟着变化，如何处理？
+乍一看，很简单呢，做个监听就好啦
+```javascript
+//html
+<p id="num"></p>
+<input type="text" name="num" id="numinput"/>
+
+//js
+var input = document.querySelector('#numinput');
+var numtext = document.querySelector('#num');
+input.addEventListener('input',function(event){
+  numtext.innerText = event.target.value;
+},false);//监听input值变化，有输入即触发
+
+input.addEventListener('change',function(event){
+  numtext.innerText = event.target.value;
+},false);//监听input值变化，只有失去焦点时才触发
+
+```
+
+上面的方法就是最基本的实现input输入变化时p标签的值也跟着变化。再思考一下，input和p标签是不是捆绑得太紧了？我们来适当“松绑”一下：
+
+```javascript
+var data = {//数据对象
+  num:0 
+};
+
+(function(){
+  var self = this;
+  function watch(obj,prop,callback){//监听函数
+    let val = obj[prop];
+    Object.defineProperty(obj,prop,{
+      get: function(){
+        return val;
+      },
+      set: function(newVal){
+        val = newVal;
+        callback(val);
+      }
+    });
+  }
+  self.watch = watch;
+})();
+```
+我们重新创建了一个数据对象`data`,它有一个属性`num`，让它作为“中间人”来松绑input与p标签，不论是input的输入变化还是p标签的显示都只与中间人有关系，当input发生变化时，我们只去修改`num`的值，而p标签的值就是`num`的值，当`num`改变时，p标签也自动显示变化后的值了。那么需要一个`watch`功能的函数来监听`num`的变化，利用`Object.defineProperty`添加get和set，并在set时返回callback函数。
+
+```javascript
+watch(data,"num",function(v) {//监听num变化，在值变化时改变p标签的值，从此与input无关系
+  numtext.innerText = v;
+});
+input.addEventListener('input',function(event){//input变化时只改变num的值，与p标签也无关系
+  data.num = event.target.value;
+},false);
+
+input.addEventListener('change',function(event){
+  data.num = event.target.value;
+},false);
+
+```
+
+
+
 [返回顶端](#杂记) [返回目录](../README.md)
