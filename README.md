@@ -1,6 +1,9 @@
 # Javascript
 ------
 记录日常学习小结
+
+[http://liruii.com/jsstudy/README.html]
+
 #### Part0
 * [准备工作](./prepare/README.md) 
 
