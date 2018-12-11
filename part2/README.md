@@ -216,6 +216,7 @@ let p = onWatch(obj, (v) => {
 p.v = 8;
 value;//8
 p.v;//Get v = 8
+```
 
 
 
