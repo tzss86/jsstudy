@@ -1,6 +1,6 @@
 # 杂记
 ------
-学习js中遇见的 ***趣事***
+js中遇见的 ***趣事***
 
 #### 1.sum(2,3)实现sum(2)(3)
 
@@ -83,7 +83,6 @@ function addLi() {
   list.appendChild(fragment);//将带20条li的片段插入到ul中
   countOfRender += 1;
   loop();
-
 }
  
 function loop() {
@@ -96,7 +95,6 @@ loop();
 ```
 
 <img src="./images/p2_2.png" width="45%" height="auto"/>
-
 
 #### 4.页面上有一个input，还有一个p标签，改变input后p标签也跟着变化，如何处理？
 乍一看，很简单呢，做个监听就好啦
@@ -157,6 +155,68 @@ input.addEventListener('change',function(event){
 },false);
 
 ```
+
+#### 5. JavaScript基础问题：
+
+##### 5-1. 是下面代码运行正常：
+
+```javascript
+const a = [1, 2, 3, 4, 5];
+a.multiply();
+console.log(a);//[1,2,3,4,5,1,4,9,16,25]
+```
+
+咋看一眼需要打印的结果，是处理数组每个元素自乘后追加到数组中。再看是运行`a.multiply()`，及实现这个方法。a 是数组类型Array，我们在它的原型上添加multiply方法，让所有数组实例都可以访问。
+
+```javascript
+const a = [1, 2, 3, 4, 5];
+const b = [9, 8, 7];
+Array.prototype.multiply = function(){
+  this.map((v)=>this.push(v*v));
+};
+console.log(a);
+console.log(b);
+```
+<img src="./images/p2_5.png" width="30%" height="auto"/>
+
+##### 5-2. `0.1 + 0.2 === 0.3` 为什么返回false
+
+答案是：`0.30000000000000004`，所以返回false。
+JavaScript中的表示数字类型的只有Number类型，它是采用IEEE 754标准定义的64位双精度浮点格式表示数字，所以JS中的所有数字都是浮点数，没有区分整数与浮点数。深层次原因可以参考[http://0.30000000000000004.com/]
+
+`parseFloat((0.1 + 0.2).toFixed(10))` 可以解决，更多的坑可以使用[http://mathjs.org/]提供的库来操作运算。
+
+##### 5-3. Proxy实现简单的数据绑定
+
+其实与Object.defineProperty()是类似的。不过Proxy扩展性更好。
+
+```javascript
+let onWatch = (obj, setBind, getLogger) => {
+  let handler = {
+    get(target, property, receiver) {
+      getLogger(target, property);
+      return Reflect.get(target, property, receiver);
+    },
+    set(target, property, value, receiver) {
+      setBind(value);
+      return Reflect.set(target, property, value);
+    }
+  };
+  return new Proxy(obj, handler);
+};
+
+let obj = {v: 1};
+let value;
+let p = onWatch(obj, (v) => {
+  value = v;
+}, (target, property) => {
+  console.log(`Get '${property}' = ${target[property]}`);
+});
+
+p.v = 8;
+value;//8
+p.v;//Get v = 8
+
 
 
 
