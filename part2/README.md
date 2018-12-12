@@ -188,34 +188,64 @@ JavaScript中的表示数字类型的只有Number类型，它是采用IEEE 754�
 
 ##### 5-3. Proxy实现简单的数据绑定
 
-其实与Object.defineProperty()是类似的。不过Proxy扩展性更好。
+和使用Object.defineProperty()来监听set/get是类似的。
 
 ```javascript
-let onWatch = (obj, setBind, getLogger) => {
-  let handler = {
-    get(target, property, receiver) {
-      getLogger(target, property);
-      return Reflect.get(target, property, receiver);
+let target = {name:"rui"};//创建目标对象
+let proxy = new Proxy(target,{ //生成一个代理
+    set(trapTarget, key, value, receiver){//set陷阱 接受4个参数
+
+        if(!trapTarget.hasOwnProperty(key)){//拦截进行自定义操作，这里是判断新增属性值是否为数字
+            if(isNaN(value)){
+                throw new TypeError("新添加属性值必须为数字");
+            }
+        }
+        return Reflect.set(trapTarget, key, value, receiver);//调用反射API：Reflect.set()进行内建操作
     },
-    set(target, property, value, receiver) {
-      setBind(value);
-      return Reflect.set(target, property, value);
+    get(trapTarget,key,receiver){//get陷阱 接受3个参数
+
+        if(!(key in receiver)){//自定义操作判定key是否存在
+            throw new TypeError(`${key}不存在`);
+        }
+        return Reflect.get(trapTarget, key, receiver);//调用反射API：Reflect.get()进行内建操作
     }
-  };
-  return new Proxy(obj, handler);
-};
-
-let obj = {v: 1};
-let value;
-let p = onWatch(obj, (v) => {
-  value = v;
-}, (target, property) => {
-  console.log(`Get '${property}' = ${target[property]}`);
 });
+```
+先回顾一下Proxy，代理，可以拦截并改变底层js引擎操作的包装器。上面的代理拦截了obj的set/get操作，添加了自定义条件判断。
 
-p.v = 8;
-value;//8
-p.v;//Get v = 8
+```javascript
+proxy.count = 100;
+target.count;//100;
+proxy.age = "18";//抛出异常
+proxy.name;//rui
+```
+简单的数据绑定则就是使用代理基本操作set/get
+
+```javascript
+const onWatch = (target, setCb, getCb) => {
+      const handler = {
+          set(trapTarget, key, value, receiver){
+              setCb(value);
+              return Reflect.set(trapTarget, key, value, receiver);
+          },
+          get(trapTarget,key,receiver){
+              getCb(trapTarget,key);
+              return Reflect.get(trapTarget, key, receiver);
+          }
+      };
+      return new Proxy(target,handler);
+};
+let obj = {};
+let value;
+let proxy = onWatch(obj,(v)=>{
+    value = v;
+},(target,key)=>{
+    console.log(`target[${key}] = ${target[key]}`);
+});
+proxy.name = "rui";
+value;//rui 
+obj.name;//rui
+proxy.name;//target[name] =rui
 ```
 
 
