@@ -248,6 +248,59 @@ obj.name;//rui
 proxy.name;//target[name] =rui
 ```
 
+##### 5-4. 若干基础
+
+```javascript
+//输出结果是什么
+(function(){
+  var a = b = 5; //js表达式从右到左执行，b=5,b没有var修饰，所以是全局变量，a有var修饰，是局部（私有）变量。
+})();
+console.log(a);// a is not defined 立即执行函数外，无法访问私有变量，所以a是is not defined，浏览器会报错
+console.log(b);// 5  b是全局变量，可以在函数体外访问，是5
+
+//用console.log自定义实现log(){} 打印“(MYLOG)hi”
+function log(){
+  return console.log.apply(this,["(MYLOG)" + [...arguments].join(" ")]);
+}
+
+log('hi');//(MYLOG)hi
+
+//自定义实现trim()函数
+//正则表达式字面量表示方式 ：// 
+//^表示从此处开始匹配，\s 表示空白符，：空格 制表符、换页符等 $ 匹配输入字符串的结尾位置
+//（）标记一个子表达式的开始和结束位置 + 表示匹配前面子表达式1次或多次 * 表示匹配前面子表达式0次或多次 g 表示全局搜索
+//将以空格开头或结尾的字符替换成""
+function Trim(str){
+  return str.replace(/(^\s+)|(\s+$)/g, "");//(^\s*)|(\s*$)
+}
+//取掉字符串中所有空格
+function RemoveAllEmpty(){
+  return str.replace(/\s+/g, "");
+}
+console.log(Trim("   a  a "));
+console.log(RemoveAllEmpty("   a  a "));
+
+//js 反转一个二叉树
+// 节点表示为
+function TreeNode(val){
+  this.val = val;
+  this.left = null;
+  this.right = null;
+}
+
+var myReserve = function (root){
+  if(root !== null){
+    var temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+    myReserve(root.left);
+    myReserve(root.right);
+  }
+  return root;
+}
+
+//js 实现非波拉切函数
+```
 
 
 
