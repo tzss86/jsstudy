@@ -299,9 +299,65 @@ var myReserve = function (root){
   return root;
 }
 
-//js 实现非波拉切函数
+//js 实现斐波那契数列函数
+//斐波那契数列： 1，1，2，3，5，8，13，21，34.... （前2位之和等于后面一位的值，n从第3位起）
+//f(1)=1 f(2)=1 f(3)=1+1=f(2)+f(1) f(4)=f(3)+f(2) f(n)=f(n-1)+f(n-2)
+function fib(n){
+  if(n === 1 || n === 2){
+    return 1;
+  } else{
+    return fib(n-1)+fib(n-2);
+  }
+}
+
+//尾调优化
+function fib(n,n1=1,n2=1){
+  if(n === 1 || n === 2){
+    return 1;
+  } else{
+   //???
+    return fib(n-1,n2,res);
+  }
+}
 ```
+##### 5-5. ES6的尾调用优化
 
+* 尾调用：指函数作为另一个函数的最后一句语句被调用。
+* 在引擎中，尾调用的函数和其他函数调用类似，创建一个新的栈帧，将其推入调用栈来表示函数调用。
+* 当在循环调用中，每一个未完成的栈帧都会被保存在内存中，当循环次数过大，调用栈会变得过大从而造成内存占据过大问题。
+* ES6中，满足下面条件，尾调用将不再创建新的栈帧，而是清除并重用当前栈帧。
 
+```javascript
+"use strict"//条件1:严格模式下
+function doSomething(){
+  //条件2:尾调用不访问当前栈帧的变量（即尾调用函数不是一个闭包）
+  return doSomethingElse();//条件3/4:尾调用结果作为返回值，有return 尾调用是最后一条语句
+}
+```
+* 你除非考虑优化函数，通常情况下无需思考此类问题：递归是主要应用场景。
+```javascript
+//常见递归：求阶乘factorial
+function factorial(n){
+  if(n <= 1){
+    return n;
+  } else {
+    return n * factorial(n-1);//无法尾调优化
+  }
+}
+factorial(5);//120
+
+//改写：
+"use strict"
+function factorial2(n,p=1){
+  if(n <= 1){
+    return 1*p;
+  } else {
+    let res = n*p;//保存乘法结果，下一次迭代时直接用它计算，不再需要额外的函数调用
+    return factorial2(n-1,res);//尾调优化
+  }
+}
+factorial2(5);//120
+```
+任何被递归定义的函数都可以改写为迭代。
 
 [返回顶端](#杂记) [返回目录](../README.md)
