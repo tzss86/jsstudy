@@ -309,16 +309,37 @@ function fib(n){
     return fib(n-1)+fib(n-2);
   }
 }
+console.log(fib(8));//21
+
+//缓存结果
+var fib = (function () {
+  var cache = {}
+  return function(n) {
+    if(n==0 || n == 1) {
+      return n;
+    }
+    if(cache[n-2] === undefined) {
+      cache[n-2] = fib(n-2);
+    }
+    if(cache[n-1] === undefined) {
+      cache[n-1] = fib(n-1);
+    }
+    return cache[n] = cache[n-1] + cache[n-2];
+  }
+})();
+
+console.log(fib(8));//21
 
 //尾调优化
+'use strict'
 function fib(n,n1=1,n2=1){
-  if(n === 1 || n === 2){
-    return 1;
-  } else{
-   //???
-    return fib(n-1,n2,res);
-  }
+  if (n <= 2) {
+      return n2;
+   }
+  return fib(n-1,n2,n1+n2);//把头两个数当成n1,n2的默认参数，n1=1,n2=1，然后n1=n2,n2=n1+n2,把结果存在n2里，当n<=2时，返回n2里存的值就是最后结果
 }
+
+console.log(fib(8));//21
 ```
 ##### 5-5. ES6的尾调用优化
 

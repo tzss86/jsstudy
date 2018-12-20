@@ -18,5 +18,5 @@
 #### part2
 
 * [函数式编程风格](./part2/Concept.md)
-* [杂记](./part2/README.md)
-* [杂记](./part2/Note1.md)
+* [杂记0](./part2/README.md)
+* [杂记1](./part2/Note1.md)

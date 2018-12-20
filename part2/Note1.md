@@ -1,7 +1,7 @@
 # 杂记
 ------
 
-记录每天遇到的js问题。
+记录每天看到的js问题。
 
 ##### 防抖与节流
 
@@ -101,3 +101,6 @@ div.style.marginTop = (margin + 10) + 'px';//重排+重绘
 * 在Chrome浏览器开发者模式下通过`Performence`工具可以分析网页的性能。
 
 <img src="./images/p2_7.png" width="30%" />
+
+
+[返回顶端](#杂记) [返回目录](../README.md)
