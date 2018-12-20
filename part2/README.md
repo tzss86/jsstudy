@@ -72,7 +72,7 @@ let countOfRender = 0;
 let list = document.querySelector("#list"); 
 
 function addLi() {
-  const fragment = document.createDocumentFragment(); //创建一个文档片段，通过将子元素li插入片段时，不会造成回流
+  const fragment = document.createDocumentFragment(); //创建一个文档片段，通过将子元素li插入片段时，不会造成回流/重排
 
   for (let i = 0; i < once; i++) {
    const li = document.createElement("li");
@@ -87,7 +87,7 @@ function addLi() {
  
 function loop() {
   if (countOfRender < loopCount) {//只要没达到总共需要渲染的次数，就不断重绘
-    window.requestAnimationFrame(addLi);//刷新屏幕，add函数在下次重新绘制动画时执行。
+    window.requestAnimationFrame(addLi);//刷新屏幕，add函数在下次重新渲染时执行。
   }
 } 
 

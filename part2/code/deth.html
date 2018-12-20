@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge, chrome=1">
+    <title>防抖与节流</title>
+    <style>
+        #debounceBox{
+            width: 100px; 
+            height: 200px; 
+            line-height: 200px; 
+            text-align: center; 
+            color: #fff; 
+            background-color: #444; 
+            font-size: 30px;
+        }
+
+        #throttleBox{
+            width: 100px;
+            height: 100px;
+            overflow: scroll;
+            background-color: #ccc;
+        }
+
+        #throttleBox p{
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="debounceBox"></div>
+    <div id="throttleBox"><p></p></div>
+    <script>
+        var movecount = 0;
+        var scrollcount = 0;
+
+        function  userMouseMove(e) {
+            console.log(++movecount);
+        };
+
+        function  userScroll(e) {
+            console.log(++scrollcount);
+        };
+
+        function debounce(func, wait) {
+            var timeout;
+
+            return function () {
+                var context = this;
+                var args = arguments;
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(function(){
+                    func.apply(context, args);
+                }, wait);
+            }
+        }
+
+        function throttle(func, wait) {
+            var timeout;
+            var previous = 0;
+
+            return function() {
+                context = this;
+                args = arguments;
+                if (!timeout) {
+                    timeout = setTimeout(function(){
+                        timeout = null;
+                        func.apply(context, args)
+                    }, wait)
+                }
+
+            }
+        }
+
+        var debounceBox = document.getElementById('debounceBox');
+        debounceBox.addEventListener('mousemove', debounce(userMouseMove, 1000));
+
+        var throttleBox = document.getElementById('throttleBox');
+        throttleBox.addEventListener('scroll', throttle(userScroll, 1000));
+        
+    </script>
+</body>
+</html>
