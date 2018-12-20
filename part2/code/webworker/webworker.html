@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge, chrome=1">
+    <title>web worker</title>
+</head>
+<body>
+    <button id="open">开启worker线程并向它发消息和监听</button>
+    <button id="close">关闭worker线程</button>
+    <p id="res"></p>
+    <script>
+        var worker;
+        var open = document.getElementById('open');
+        open.addEventListener('click',startWork,false);
+        
+        function startWork(){
+            worker = new Worker('worker.js');
+            worker.postMessage({name: '我是主线程', args: "hi"});
+
+            worker.addEventListener('message',function (event) {
+              console.log('Received worker message ' + event.data);
+              document.getElementById("res").innerHTML = event.data;
+            });
+
+            worker.addEventListener('error', function (event) {
+              console.log(event);
+            });
+        }
+        
+        var close = document.getElementById('close');
+        close.addEventListener('click',closeWork,false);
+
+        function closeWork(){
+            worker.terminate();
+        }
+    </script>
+</body>
+</html>

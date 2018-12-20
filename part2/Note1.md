@@ -102,5 +102,42 @@ div.style.marginTop = (margin + 10) + 'px';//重排+重绘
 
 <img src="./images/p2_7.png" width="30%" />
 
+##### Web Worker
+
+* web worker是H5的概念，它可以让一些事情在“Worker线程”执行，而不影响主线程（通常负责UI）。
+* 主线程与子线程脚步(worker.js)需要在同源下访问。
+* 主线程可以创建/监听/postMessage/关闭 worker线程
+* 子线程也可以监听主线程的消息，向主线程发消息，关闭自己
+
+```javascript
+//worker.js 子线程
+this.addEventListener('message', function (e) {//监听主线程发来的消息
+  this.postMessage('向主线程发消息: 你刚刚发来的内容是：' + e.data.name + e.data.args);//向主线程回话
+  timedCount();
+}, false);
+
+var i=0;
+
+function timedCount(){
+    i=i+1;
+    postMessage(i);//向主线程发消息
+    setTimeout("timedCount()",500);
+}
+```
+
+```javascript
+var worker = new Worker('worker.js');//创建子线程
+worker.postMessage({name: '我是主线程', args: "hi"});//发消息给子线程
+
+worker.addEventListener('message',function (event) {//监听子线程发来的消息
+  console.log('Received worker message ' + event.data);
+  document.getElementById("res").innerHTML = event.data;
+});
+
+worker.addEventListener('error', function (event) {//监听错误消息
+  console.log(event);
+});
+```
+[完整demo](./code/webworker/)
 
 [返回顶端](#杂记) [返回目录](../README.md)
