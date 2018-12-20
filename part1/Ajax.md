@@ -136,4 +136,83 @@ jQuery会自动使用`<script>`元素并随机生成一个callback名称用于�
 #### 5.参考规范
 [xhr.spec](https://xhr.spec.whatwg.org/)
 
+#### 6.jQuery 封装的ajax
+
+```javascript
+function getRequest(url, callback) {
+    $.ajax({
+        url: url,
+        beforeSend: function () {
+            loadingStart();
+        },
+        success: function (results) {
+            callback({data:results,status:true});
+        },
+        error: function (e) {
+            callback({data:e,status:false});
+        },
+        complete: function () {
+            loadingStop();
+        }
+    });
+}
+
+function postRequest(url,param,callback) {
+    $.ajax({
+        url: url,
+        type:'POST',
+        dataType:'JSON',
+        data: param,
+        beforeSend: function () {
+            loadingStart();
+        },
+        success: function (results) {
+            callback({data:results,status:true});
+        },
+        error: function (e) {
+            callback({data:e,status:false});
+        },
+        complete: function () {
+            loadingStop();
+        }
+    });
+}
+```
+
+#### 7.Fetch API
+
+* 基于标准 Promise 实现，支持 async/await
+
+```javascript
+function getRequest(url,cb){
+    fetch(url)
+    .then(response => response.json())
+    .then(data => cb(data))
+    .catch((err)=> cb(err));
+}
+
+function postRequest(url,parms,cb){
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+    .then(data => cb(data))
+    .catch(error => cb(err));
+}
+//async/await 写法
+async function getRequest(url,cb){
+    try{
+        let response = await fetch(url);
+        let data = await response.json();
+        cb(data);
+    }catch(err){
+        cb(err)
+    }
+}
+```
+其他用法：[https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch]
+
 [返回顶端](#Ajax) [返回目录](../README.md)
