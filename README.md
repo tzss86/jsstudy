@@ -21,3 +21,4 @@
 * [杂记0](./part2/README.md)
 * [杂记1](./part2/Note1.md)
 * [杂记2](./part2/Note2.md)
+* [杂记3](./part2/Note3.md)
