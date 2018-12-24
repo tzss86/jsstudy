@@ -14,6 +14,7 @@
 * [数组](./part1/Array.md)
 * [变量、作用域、内存、闭包](./part1/Base.md)
 * [Ajax](./part1/Ajax.md)
+* [事件委托](./part1/Event.md)
 
 #### part2
 
