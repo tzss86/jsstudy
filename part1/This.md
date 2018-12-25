@@ -190,4 +190,20 @@ document.addEventListener("click",(event) => {
 ```
 <img src="./images/p_14.png" width="28%" height="auto"/>
 
+##### 7、 new.target
+
+```javascript
+function Person(name){
+    if(typeof new.target !== 'undefined'){// this instanceof Person
+        this.name = name;
+    } else {
+        throw Error("必须用new来调用Person")
+    }
+}
+
+let p = new Person('rui');
+let p2 = Person.call(p,'rui');//抛出异常 若是判断this instanceof Person，则不会报错
+```
+
+
 [返回顶端](#This) [返回目录](../README.md)

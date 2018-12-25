@@ -185,5 +185,4 @@ var oo = new Obj();
 console.log(oo.fullName);//Lee Rui
 ```
 
-
 [返回顶端](#对象) [返回目录](../README.md)
