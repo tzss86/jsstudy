@@ -8,7 +8,11 @@
     * `引用类型`有：`Object`， `Array`， `Date`， `RegExp`， `Function`，`Set` 和 `Map`
 * 变量的值是基本类型时，复制到另一个变量时，是由系统新分配一块栈内存，将值拷贝进去。
 * 变量的值是引用类型时，复制到另一个变量时，是将指针指向同一个对象。
+
 <img src="./images/t_3.png" width="40%" height="auto" />
+
+* 栈内存一般由系统分配固定大小来存放基本类型，堆内存一般通过代码分配存放不固定大小对象。
+* 栈：先进后出，后进先出  堆：按照“引用”来访问
 
 #### 2.作用域
 * 执行上下文(execution context)也叫执行环境，一个执行环境定义了变量或函数有权访问的其他数据。
@@ -27,10 +31,17 @@
     }
     changeColor();
 ```
-上面的代码涉及3个执行环境：全局执行环境、changeColor()的局部执行环境、swapColor()的局部执行环境
-全局执行环境的VO={color1:"red",changeColor:changeColor}
-changeColor()局部执行环境的VO={color2:"yellow",swapColor:swapColor}，但它还能访问全局执行环境的color1
-swapColor()局部执行环境的VO={color3:""}，但它还能访问全局执行环境的color1和changeColor的color2和swapColor，因为它们时它的父执行环境。
+* 上面的代码涉及3个执行环境：
+
+    * 全局执行环境
+    * changeColor()的局部执行环境
+    * swapColor()的局部执行环境
+
+* 全局执行环境的`VO={color1:"red", changeColor:changeColor}`
+
+* changeColor()局部执行环境的`VO={color2:"yellow",swapColor:swapColor}`，但它还能访问全局执行环境的color1
+
+* swapColor()局部执行环境的`VO={color3:""}`，但它还能访问全局执行环境的color1和changeColor的color2和swapColor，因为它们是它的父执行环境。
 
 <img src="./images/t_4.png" width="40%" height="auto" />
 
@@ -82,7 +93,7 @@ var spa = (function(){
 var person = {
     name: "rui",
     who:function(){
-        var that = this;
+        var that = this;//将this保存到that
         $.ajax({//ajax 是异步的，当它返回时，who()已执行完了
             success: function(){
                 console.log(that.name);//本来的this不是person对象，是ajax，通过闭包来保存那时的this，从而访问到name
@@ -101,6 +112,6 @@ var person = {
 };
 ```
 
-
+* 闭包的缺点： 因为闭包会保存父函数的变量，可能造成内存溢出。
 
 [返回顶端](#基础概念) [返回目录](../README.md)

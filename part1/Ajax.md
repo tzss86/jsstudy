@@ -215,4 +215,63 @@ async function getRequest(url,cb){
 ```
 其他用法：[https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch]
 
+#### 8.iframe
+
+* iframe 与 父页面index.html 同源
+
+>父页面访问子页面方法/元素
+
+```javascript
+var iframe = document.getElementById("myFrame");
+//访问iframe元素
+var v = iframe.contentWindow.document.getElementById("a").innerText;
+//调用iframe方法
+iframe.contentWindow.a();//a()为iframe页面的方法
+```
+
+>子页面访问父页面方法/元素
+
+```javascript
+//访问父页面元素
+var v = window.parent.document.getElementById('father').innerText;
+//调用父页面方法
+window.parent.father();
+```
+
+* iframe 与 父页面index.html 非同源
+
+    * 二级域名不同（a.lirui.com vs b.lirui.com）: 设置两页面的`document.domain = 'example.com';`为相同的后，可按照上面同源方式获取DOM
+    * 完全不同域名：`window.postMessage()`
+
+>父窗口向子窗口发信息
+
+```javascript
+var iframe = document.getElementById("myFrame");
+//发送消息
+iframe.contentWindow.postMessage('Hello World!', 'http://bbb.com');
+//监听消息
+window.addEventListener("message", function(event){
+  var data = event.data;//接收的数据
+  // 判断域名
+  if(event.origin == 'http://bbb.com'){
+    //doSomething()
+  }
+});
+```
+
+>子窗口向父窗口发信息
+
+```javascript
+//发送消息
+window.parent.postMessage('Nice to see you', 'http://aaa.com');
+//监听消息
+window.addEventListener("message", function(event){
+  var data = event.data;//接收的数据
+  // 判断域名
+  if(event.origin == 'http://aaa.com'){
+    //doSomething()
+  }
+});
+```
+
 [返回顶端](#Ajax) [返回目录](../README.md)
