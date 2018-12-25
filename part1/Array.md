@@ -278,4 +278,133 @@ function f(){
 f(1,3,5);// [1, 3, 5]
 ```
 
+### 四、常见循环遍历
+
+##### 0. for循环
+
+```javascript
+let arr = ["a","b","c"];
+for(let i = 0; i < arr.length; i++){
+    console.log(arr[i]);
+}
+//a 
+//b 
+//c
+```
+##### 1. forEach()
+
+```javascript
+arr.forEach((value)=>{console.log(value)});
+//a 
+//b 
+//c
+```
+
+##### 2. for-of
+
+```javascript
+for(let item of arr){console.log(item)}
+//a 
+//b 
+//c
+```
+##### 3. for-in （通常用于遍历对象key）
+
+```javascript
+for(let key in arr){console.log(key)} //arr也可看作obj
+//0 
+//1 
+//2    
+```
+
+* 遍历对象key的方法：
+    * Object.keys(obj)： 可枚举属性
+    * for-in ： 可枚举属性 + 从对象原型链上继承下来的属性 可用（obj.hasOwnProperty(key)）判断是否是继承下来的。
+    * Object.getOwnPropertyNames(obj) 可枚举属性 + 不可枚举属性
+
+```javascript
+let obj = {name:"rui",age:18};
+Object.defineProperty(obj,"weight",{value:100,enumerable:false});
+Object.keys(obj);
+//["name", "age"]   
+```
+
+```javascript
+for(let key in obj){console.log(key)}
+//name
+//age  
+```
+
+```javascript
+Object.getOwnPropertyNames(obj);//返回所有属性（可枚举属性 + 不可枚举属性）
+//["name", "age", "weight"] 
+```
+
+```javascript
+class Person {
+    constructor(){
+        this.maxage = 90;
+    }
+    sayHi(){ //类方式定义的方法不可枚举
+        console.log("hi");
+    }
+}
+Person.prototype.why = function(){};//原型链方式定义的方法可枚举
+//其实class定义的方法就是定义到prototype上了，不过不可枚举。
+let p = new Person();
+p.name = "rui";
+p.age =18;
+
+for (var key in p) { //可枚举+原型链继承 属性
+  if (p.hasOwnProperty(key)) {
+    console.log("own=",key);//自身定义的
+  } else {
+    console.log(key);//原型链继承下来的
+  }
+}
+//own= maxage
+//own= name
+//own= age
+//why
+```
+
+##### 4. Iterator
+
+* 迭代器是一个特殊对象：
+    * 它有一个`next()`方法，每次调用返回一个结果对象({value,done})
+    * 它还有一个内部指针，指向当前集合的位置。
+    
+```javascript
+//自定义 一个Iterator
+function createIterator(items){
+    var i = 0;
+    return {
+        next: function(){
+            var done = i >= items.length;
+            var value = !done ? items[i++] : undefined;
+            return {done:done,value:value};
+        }
+    };
+}
+
+var iter = createIterator(arr);
+console.log(iter.next());//{done: false, value: "a"}
+console.log(iter.next());//{done: false, value: "b"}
+console.log(iter.next());//{done: false, value: "c"}
+console.log(iter.next());//{done: true, value: undefined}
+```
+
+* 可迭代对象具有`Symbol.iterator` 属性，通过它可以返回可迭代对象的默认迭代器。
+* 可迭代对象： Array Set Map String 。
+* for-of 循环中就用到了可迭代对象的这些功能。
+
+```javascript
+//访问默认迭代器
+let iter = arr[Symbol.iterator]();
+console.log(iter.next());//{value: "a", done: false}
+console.log(iter.next());//{value: "b", done: false}
+console.log(iter.next());//{value: "c", done: false}
+console.log(iter.next());//{value: undefined, done: true}
+```
+
 [返回顶端](#数组) [返回目录](../README.md)

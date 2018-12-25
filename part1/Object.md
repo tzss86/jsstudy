@@ -5,6 +5,7 @@ js中的对象就是一组无序的 *“属性-值”* 集合。值可以是数�
 ### 创建对象的基本方法
 * 使用new Object()
 * 使用对象字面量方法
+* Object.create(Object.prototype)
 * 自定义一个对象，通过new + 构造函数
 
 ##### 一、new Object()
