@@ -28,6 +28,9 @@ str.split("");//["1", "2", "3"]
 var a = [1,2,3];
 a.reverse();
 console.log(a);//[3, 2, 1]
+
+//若不想改变原数组，则可以采用下面方式：
+[...a].reverse();
 ```
 
 ##### 3.`sort()`
@@ -59,6 +62,30 @@ var a = [1,2,3];
 a.concat(4,5,6);//[1, 2, 3, 4, 5, 6]  a不变，仍是：[1,2,3]
 a.concat([9,8],[12,25]);// [1, 2, 3, 9, 8, 12, 25]
 a.concat([11,[10,9]],77);//[1, 2, 3, 11, [10,9], 77] 不会递归[10,9]
+
+//若想实现数组扁平化，可以采用下面方式：
+function flatten(arr){
+    return arr.reduce((x,v)=>{return x.concat(Array.isArray(v)? flatten(v) : v)},[]);
+}
+
+function flatten(arr){
+    while (arr.some(v => Array.isArray(v))) {
+        arr = [].concat(...arr);
+    }
+    return arr;
+}
+
+function flatten(arr){
+    var res = [];
+    for(var i = 0; i < arr.length; i++){
+        if(Array.isArray(arr[i])){
+            res = res.concat(flatten(arr[i]));
+        } else{
+            res.push(arr[i]);
+        }
+    }
+    return res;
+}
 ```
 ##### 5.`slice()`
 
@@ -74,6 +101,11 @@ a.slice(3);//[4, 5]
 a.slice(2,4);//[3, 4]
 a.slice(1,-1);//[2, 3, 4] -1代表数组最后一个元素
 a.slice(-3,-1);//[3, 4]
+
+//也可以用下面方式调用，效果一致
+var a = [1,2,3,4,5];
+Array.prototype.slice.call(arr, 1);//返回：[2,3,4,5]
+[].slice.call(arr,1);//返回：[2,3,4,5]
 ```
 
 ##### 6.`splice()`
