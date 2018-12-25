@@ -43,6 +43,22 @@ console.log(car2);
 ```
 <img src="./images/p_30.png" width="35%" height="auto"/>
 
+* 注意：！： 若是class创建的类，必须通过new来实例化，采用mimicNew代替会报错。
+
+```javascript
+class Person {
+    constructor(maxage){
+        this.maxage = maxage;
+    }
+    sayHi(){
+        console.log("hi"+this.maxage);
+    }
+}
+```
+
+<img src="./images/p_34.png" width="55%" height="auto"/>
+
+
 ### mimic call()函数
 函数如果通过call的方式调用，可以把this指向任意对象。
 先看下面的例子：
