@@ -7,7 +7,7 @@
 * 包含：协议://主机:端口号/路径?参数
 * 例如：http://liruii.com/index.html 默认80端口号
 
->URL的几部分解释
+>URL
 
 * 传输协议：常见的有：http(超文本传输协议)， https（http+TLS/SSL）， ftp（File Transfer Protocol，文件传输协议） 
 * 域名：由一串用点分隔的名字组成的Internet上某一台计算机或计算机组的名称
