@@ -174,6 +174,8 @@ const b = [9, 8, 7];
 Array.prototype.multiply = function(){
   this.map((v)=>this.push(v*v));
 };
+a.multiply();
+b.multiply();
 console.log(a);
 console.log(b);
 ```
@@ -290,9 +292,12 @@ function TreeNode(val){
 
 var myReserve = function (root){
   if(root !== null){
-    var temp = root.left;
-    root.left = root.right;
-    root.right = temp;
+    //常规交换
+    //var temp = root.left;
+    //root.left = root.right;
+    //root.right = temp;
+    //利用结构交换
+    [root.left, root.right] = [root.right, root.left];
     myReserve(root.left);
     myReserve(root.right);
   }
@@ -305,7 +310,7 @@ var myReserve = function (root){
 function fib(n){
   if(n === 1 || n === 2){
     return 1;
-  } else{
+  } else {
     return fib(n-1)+fib(n-2);
   }
 }
@@ -315,8 +320,8 @@ console.log(fib(8));//21
 var fib = (function () {
   var cache = {}
   return function(n) {
-    if(n==0 || n == 1) {
-      return n;
+    if(n === 1 || n === 2) {
+      return 1;
     }
     if(cache[n-2] === undefined) {
       cache[n-2] = fib(n-2);
@@ -352,7 +357,7 @@ console.log(fib(8));//21
 "use strict"//条件1:严格模式下
 function doSomething(){
   //条件2:尾调用不访问当前栈帧的变量（即尾调用函数不是一个闭包）
-  return doSomethingElse();//条件3/4:尾调用结果作为返回值，有return 尾调用是最后一条语句
+  return doSomethingElse();//条件3/4:尾调用结果作为返回值/尾调用是函数最后一条执行的语句
 }
 ```
 * 你除非考虑优化函数，通常情况下无需思考此类问题：递归是主要应用场景。
@@ -362,7 +367,7 @@ function factorial(n){
   if(n <= 1){
     return n;
   } else {
-    return n * factorial(n-1);//无法尾调优化
+    return n * factorial(n-1);//无法尾调优化，有计算
   }
 }
 factorial(5);//120
@@ -373,8 +378,7 @@ function factorial2(n,p=1){
   if(n <= 1){
     return 1*p;
   } else {
-    let res = n*p;//保存乘法结果，下一次迭代时直接用它计算，不再需要额外的函数调用
-    return factorial2(n-1,res);//尾调优化
+    return factorial2(n-1,n*p);//尾调优化，n*p保存乘法结果给p，下一次迭代时直接用它计算，不再需要额外的函数调用
   }
 }
 factorial2(5);//120
