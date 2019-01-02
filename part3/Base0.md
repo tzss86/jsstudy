@@ -166,5 +166,103 @@ Person.create()
 * 类只能使用`new`来创建实例
 * 类的所有方法都是不可枚举的
 
+##### 11. Promise
+
+* Promise 设计目标在于改进js中的异步编程。
+* Promise有3个状态：`pending | fulfilled | rejected`。
+
+```javascript
+//
+function doSomething(){
+    return new Promise((resolve,reject)=>{
+        fs.readFile(filename, {encoding:"utf8"}, (err,data)=>{
+            if(err){
+                reject(err);
+                return;
+            }
+            resolve(data);
+        })
+    });
+}
+
+let p = doSomething();
+p.then((data)=>{
+    //...
+});
+p.catch((err)=>{
+    //...
+});
+
+//串联Promise
+let p1 = new Promise((resolve, reject)=>{
+    resolve(12);
+});
+p1.then((data)=>{
+    console.log(data);
+    return data+1;
+}).then((data)=>{
+    console.log(data);
+    throw new Error("err")
+}).catch((err)=>{
+    console.log(err);
+});
+
+//并行Promise
+let p1 = new Promise((resolve,reject)=>{resolve(1)});
+let p2 = new Promise((resolve,reject)=>{resolve(2)});
+let p3 = new Promise((resolve,reject)=>{resolve(3)});
+
+let p4 = Promise.all([p1,p2,p3]);
+p4.then((datas)=>{
+    console.log(datas[0]);
+    console.log(datas[1]);
+    console.log(datas[2]);
+});
+```
+##### 12.Proxy and Reflect
+
+* set | get | has 代理陷阱
+* Reflect.API
+
+```javascript
+let target = {};
+let proxy = new Proxy(target,{});
+proxy.name = "rui";
+console.log(proxy.name);
+console.log(target.name);
+
+//set陷阱
+//get陷阱
+//has陷阱
+let target = {name:"rui",value: 42};
+let proxy = new Proxy(target,{
+    set(target,key,value,receiver){
+        if(!target.hasOwnProperty(key)){
+            if(isNaN(value)){
+                throw new Error("属性值必须是数字");
+            }
+        }
+        return Reflect.set(target,key,value,receiver);
+    },
+    get(target,key,receiver){
+        if(!(key in receiver)){
+            throw new Error("属性"+key+"不存在");
+        }
+        return Reflect.get(target,key,receiver);
+    },
+    has(target,key){
+        if(key === "value"){
+            return false;
+        } else {
+            return Reflect.has(target, key);
+        }
+    }
+});
+
+proxy.name;//rui
+proxy.sex;//VM29:13 Uncaught Error: 属性sex不存在
+"value" in proxy;//false
+"name" in proxy;//true
+```
 
 [返回顶端](#ES6) [返回目录](../README.md)

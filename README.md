@@ -24,6 +24,7 @@
 * [杂记2](./part2/Note2.md)
 * [杂记3](./part2/Note3.md)
 
-#### part3(ES6)
+#### part3(ES6/7/8)
 
 * [基础0](./part3/Base0.md)
+* [基础1](./part3/Base1.md)
