@@ -148,6 +148,17 @@ a.shift();//a:[7, 6, 1, 2, 3, 4, 5]
 ```
 ### 二、来自ES5的数组方法
 
+##### 0. `Array.isArray(value)`
+
+* 判断value是不是Array，不管它在哪个全局环境中创建的。
+* `value instanceof Array` 假定是只有一个全局执行环境，当多框架下可能出现多个Array构造函数时，无法判断A框架下定义的数组在B框架下具有相同构造函数。
+
+```javascript
+if(Array.isArray(value)){
+    //......
+}
+```
+
 ##### 1.`forEach()`
 
 * 从头到尾遍历数组元素，为每个元素调用指定的函数

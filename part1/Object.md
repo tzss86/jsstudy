@@ -3,9 +3,9 @@
 js中的对象就是一组无序的 *“属性-值”* 集合。值可以是数据或者函数。ES6中增加了类 *class*，在ES6之前，js通过定义对象来处理面向对象编程。
 
 ### 创建对象的基本方法
-* 使用new Object()
-* 使用对象字面量方法
-* Object.create(Object.prototype)
+* 使用new Object() (Object构造函数的作用：定义新对象默认属性和方法)
+* 使用对象字面量方法 (最常用)
+* Object.create(Object.prototype) 
 * 自定义一个对象，通过new + 构造函数
 
 ##### 一、new Object()
@@ -13,7 +13,7 @@ js中的对象就是一组无序的 *“属性-值”* 集合。值可以是数�
 const person = new Object();
     person.name = "rui";
     person.age = 18;
-    person.sayHi = function () {
+    person.sayHi = function () { //可枚举 
         console.log("hi," + this.name);
     }
 ```
@@ -26,7 +26,7 @@ const person = new Object();
 const person = {
     name:"rui",
     age:18,
-    sayHi:function(){
+    sayHi:function(){//可枚举
         console.log("hi, " + this.name);
     }
 };
@@ -74,7 +74,7 @@ class Person {
         this.name =  "rui";
         this.age = 18;
     }
-    sayHi(){ 
+    sayHi(){ //class方式定义的方法不可枚举 for-in 无法遍历出sayHi
         console.log("hi, " + this.name);
     }
 }
