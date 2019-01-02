@@ -23,3 +23,7 @@
 * [杂记1](./part2/Note1.md)
 * [杂记2](./part2/Note2.md)
 * [杂记3](./part2/Note3.md)
+
+#### part3(ES6)
+
+* [基础0](./part3/Base0.md)
