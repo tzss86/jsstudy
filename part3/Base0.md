@@ -265,4 +265,51 @@ proxy.sex;//VM29:13 Uncaught Error: 属性sex不存在
 "name" in proxy;//true
 ```
 
+##### 13. 模块
+
+* 命名冲突与安全问题使得ES6引进了模块。
+* 模块是自动运行在严格模式下并且没有办法退出运行的js代码，在模块内部的变量仅在模块顶级作用域存在。
+* 模块可以从其他模块导入绑定，也可以导出外部代码要访问的变量/函数等。
+
+```javascript
+//example.js
+//导出数据
+export var color = "red";
+//导出函数
+export function sum(a,b){
+    return a+b;
+}
+//导出类
+export class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+}
+
+function fib(){...}
+export default fib;//一个模块有且只有一个默认导出值。
+//export { fib as default}
+
+//导入多个绑定 大括号表示从给定模块导入的绑定(binding)
+import { sum, color } from "./example.js";
+sum = function(){};//错误，导入的都是只读绑定，不能被修改
+//导入整个模块 as 是重命名模块
+import * as example from "./example.js";
+example.sum();
+//导入默认值
+import fib from "./example.js";
+//import fib, {color} from "./example.js"; 默认值必须在非默认值之前
+
+//导出已经导入的绑定
+//import { sum } from "./example.js";
+//export { sum }
+export { sum } from "./example.js";
+```
+* 使用内建对象的共享定义可以在模块中访问，没有显式的`export | import`
+* `Array.prototype.sum = function(){...}`
+* Web浏览器加载`脚本`与`模块`的区别：
+    - `<script type="text/javascript"> | <script type="module">`
+    - 加载顺序：加载脚本时defer可选，模块时defer默认添加，则当HTML解析器遇到具有src属性的module时，模块就开始下载，直到文档被完全解析模块才执行。模块按照出现在HTML中的顺序执行。
+
 [返回顶端](#ES6) [返回目录](../README.md)
